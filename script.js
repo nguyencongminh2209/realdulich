@@ -61,58 +61,64 @@ function redirectToNewPage(city) {
     window.location.href = newPageUrl;
 }
 
+
+var tourList = {
+    hanoi: [
+        { 
+            name: "Tour Hà Nội 3 Ngày 2 Đêm",
+            description: "Khám phá những địa điểm nổi tiếng ở Hà Nội trong 3 ngày 2 đêm. Bạn sẽ thăm Quảng trường Ba Đình, Hoàng thành Thăng Long, và thưởng thức ẩm thực độc đáo.",
+            price: "$300",
+            duration: "3 ngày 2 đêm",
+            highlights: [
+                "Quảng trường Ba Đình",
+                "Hoàng thành Thăng Long",
+                "Ẩm thực đặc sắc"
+            ]
+        },
+        // Thêm các tour khác cho Hà Nội
+    ],
+    danang: [
+        { 
+            name: "Tour Đà Nẵng - Hội An 4 Ngày 3 Đêm",
+            description: "Du lịch qua Đà Nẵng và Hội An trong 4 ngày 3 đêm. Bạn sẽ thăm Bà Nà Hills, Cầu Rồng và phố cổ Hội An.",
+            price: "$450",
+            duration: "4 ngày 3 đêm",
+            highlights: [
+                "Bà Nà Hills",
+                "Cầu Rồng",
+                "Phố cổ Hội An"
+            ]
+        },
+        // Thêm các tour khác cho Đà Nẵng
+    ],
+    hochiminh: [
+        { 
+            name: "Tour Sài Gòn Mới",
+            description: "Khám phá những địa điểm mới và sôi động của Sài Gòn. Bạn sẽ thăm các quận trung tâm, thưởng thức ẩm thực đa dạng.",
+            price: "$280",
+            duration: "3 ngày 2 đêm",
+            highlights: [
+                "Quận trung tâm",
+                "Ẩm thực đa dạng"
+            ]
+        },
+        // Thêm các tour khác cho Sài Gòn
+    ],
+};
+
 function searchTour() {
-    var selectedCity = document.getElementById("citySelect").value;
-    var numberOfPeople = document.getElementById("numberOfPeople").value;
-    var departureDate = document.getElementById("departureDate").value;
-    var returnDate = document.getElementById("returnDate").value;
-    var cityInfoDiv = document.getElementById("cityInfo");
+    var citySelect = document.getElementById("citySelect");
+    var selectedCity = citySelect.value;
+    var tourListContainer = document.getElementById("tourList");
+    var selectedCityTours = tourList[selectedCity];
 
-    // Xóa thông tin hiện tại
-    cityInfoDiv.innerHTML = "";
-
-    // Kiểm tra nếu số người và ngày đi ngày về đã được nhập
-    if (numberOfPeople && departureDate && returnDate) {
-        // Hiển thị danh sách tour tương ứng với thành phố được chọn
-        switch (selectedCity) {
-            case "hanoi":
-                displayTourList("Hà Nội", departureDate, returnDate);
-                break;
-            case "danang":
-                displayTourList("Đà Nẵng", departureDate, returnDate);
-                break;
-            case "hochiminh":
-                displayTourList("Hồ Chí Minh", departureDate, returnDate);
-                break;
-            // Thêm các trường hợp khác nếu cần
-            default:
-                cityInfoDiv.innerHTML = "<p>Chọn một thành phố để hiển thị thông tin.</p>";
-        }
-    } else {
-        // Hiển thị thông báo nếu số người hoặc ngày đi/ngày về chưa được nhập
-        cityInfoDiv.innerHTML = "<p>Vui lòng nhập đầy đủ thông tin số người và ngày đi/ngày về.</p>";
-    }
-
-    // Ngăn chặn form submit mặc định
-    return false;
-}
-
-function displayTourList(cityName, departureDate, returnDate) {
-    var cityInfoDiv = document.getElementById("cityInfo");
-    var selectedCityTours = tourList[cityName];
-
-    // Xóa nội dung cũ trong cityInfoDiv
-    cityInfoDiv.innerHTML = "";
+    // Xóa nội dung cũ trong tourListContainer
+    tourListContainer.innerHTML = "";
 
     if (selectedCityTours) {
         // Hiển thị danh sách tour cho thành phố đã chọn
         for (var i = 0; i < selectedCityTours.length; i++) {
             var tour = selectedCityTours[i];
-            // Tính toán duration dựa trên ngày đi và ngày về
-            var duration = calculateDuration(departureDate, returnDate);
-            // Cập nhật giá trị duration trong tour
-            tour.duration = duration + " ngày";
-
             var tourItem = document.createElement("div");
             tourItem.classList.add("tour-item");
             tourItem.innerHTML = `
@@ -122,16 +128,16 @@ function displayTourList(cityName, departureDate, returnDate) {
                 <p>Điểm nổi bật: ${tour.highlights.join(", ")}</p>
                 <button onclick="bookTour('${tour.name}')">Đặt tour</button>
             `;
-            cityInfoDiv.appendChild(tourItem);
+            tourListContainer.appendChild(tourItem);
         }
     } else {
         var noTourMessage = document.createElement("p");
         noTourMessage.textContent = "Không có tour nào cho địa điểm đã chọn.";
-        cityInfoDiv.appendChild(noTourMessage);
+        tourListContainer.appendChild(noTourMessage);
     }
-    document.getElementById('cityInfo').style.display = 'block';
-}
+    document.getElementById('tourList').style.display = 'block';
 
+}
 
 
 
@@ -144,5 +150,4 @@ function bookTour(tourName) {
 
 }
 
-
-
+// ...
